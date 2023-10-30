@@ -1,0 +1,10 @@
+.gd-flex-center {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.gd-flex-c {
+  display: flex;
+  flex-direction: column;
+}
