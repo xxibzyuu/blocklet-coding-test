@@ -1,20 +1,21 @@
 <template>
   <div id="app">
-    <block></block>
+    <block-info></block-info>
   </div>
 </template>
 
 <script>
-import block from '@/pages/block/index.vue'
+import blockInfo from '@/pages/block-info/index.vue';
 
 export default {
   name: 'App',
   components: {
-    block
+    blockInfo,
   },
 };
 </script>
 
 <style>
-  @import '@/assets/common.css';
+@import '@/assets/reset.css';
+@import '@/assets/common.css';
 </style>

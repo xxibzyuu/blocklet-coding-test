@@ -2,60 +2,71 @@
  * @Description: 
  * @Author: yuanzeyu
  * @Date: 2023-10-30 17:14:56
- * @LastEditTime: 2023-10-30 23:02:11
+ * @LastEditTime: 2023-10-31 10:53:34
 -->
 <template>
   <div class="header">
-    <a-row>
-      <a-col :span="10" :offset="6">
-        <!-- <div class="header-center"> -->
-          <a-input-search class="header-search" placeholder="Search Blockchain, Transaction, Address and Blocks" @search="onSearch" >
-            <a-button slot="enterButton" class="enter-btn">
-              <a-icon type="search" />
-            </a-button>
-          </a-input-search>
-          <a-icon type="bulb" :style="{fontSize: '24px', color: '#000'}" />
-        <!-- </div> -->
-      </a-col>
-      <a-col :span="4" :offset="4">
-        <button class="sign-btn"><a-icon type="user" /> Sign in</button>
-      </a-col>
-    </a-row>
-    
+    <!-- <a-row> -->
+    <!-- <a-col :span="10" :offset="6"> -->
+    <div :class="['search-container', { center: showSearch }]">
+      <a-input-search
+        v-if="showSearch"
+        ref="searchInput"
+        class="header-search"
+        placeholder="Search Blockchain, Transaction, Address and Blocks"
+        @search="onSearch"
+        @blur="hideSearch">
+        <a-button slot="enterButton" class="enter-btn">
+          <a-icon type="search" />
+        </a-button>
+      </a-input-search>
+      <a-icon type="bulb" :style="{ fontSize: '24px', color: '#000', margin: '0 10px' }" />
+      <a-icon v-if="!showSearch" type="search" :style="{ fontSize: '24px', color: '#000', marginRight: '10px' }" />
+    </div>
+    <!-- </a-col> -->
+    <!-- <a-col :span="4" :offset="4"> -->
+    <button class="sign-btn"><a-icon type="user" /> Sign in</button>
+    <!-- </a-col> -->
+    <!-- </a-row> -->
   </div>
 </template>
 
 <script>
 export default {
   name: 'headerComponent',
+  props: ['isShow'],
   data() {
-    return {
-
-    }
+    return {};
+  },
+  computed: {
+    showSearch() {
+      return this.isShow;
+    },
   },
   methods: {
-    onSearch() {
-      
-    }
-  }
-}
+    onSearch() {},
+    toggleSearch() {
+      this.showSearch = true;
+      this.$nextTick(() => {
+        this.$refs.searchInput.focus();
+      });
+    },
+    hideSearch() {
+      this.showSearch = false;
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
 .header {
-  /* display: flex; */
+  display: flex;
   padding: 20px 30px;
   background: rgba(255, 255, 255, 0.7);
   border-bottom: 1px solid rgb(238, 238, 238);
 
-  &-center {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    padding: 0 25%;
-  }
-  
   &-search {
+    width: 50%;
     height: 40px;
     border-radius: 30px;
 
@@ -77,6 +88,21 @@ export default {
     color: #fff;
     border-radius: 40px;
     border: none;
+  }
+}
+.search-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.search-container.center {
+  justify-content: center;
+  margin-right: auto;
+}
+@media (max-width: 840px) {
+  .search-container {
+    justify-content: flex-end;
   }
 }
 .ant-input:hover {

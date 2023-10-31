@@ -1,3 +1,7 @@
+p {
+  margin: 0 !important;
+}
+
 .gd-flex-center {
   display: flex;
   flex-direction: row;
@@ -7,4 +11,12 @@
 .gd-flex-c {
   display: flex;
   flex-direction: column;
+}
+
+.dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #ccc;
+  margin: 0 5px;
 }

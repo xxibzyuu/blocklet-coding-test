@@ -1,5 +1,4 @@
-
-@mixin custom-text($size, $color){
+@mixin custom-text($size: 14px, $color: #000) {
   font-size: $size;
   color: $color;
 }
