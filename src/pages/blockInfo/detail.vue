@@ -2,17 +2,21 @@
  * @Description: block概要
  * @Author: yuanzeyu
  * @Date: 2023-10-31 08:44:17
- * @LastEditTime: 2023-10-31 18:48:20
+ * @LastEditTime: 2023-10-31 21:19:07
 -->
 <template>
   <div class="detail-list">
     <div class="detail-item" v-for="item in BLOCK_DETAIL_COLUMNS" :key="item.key">
       <span class="detail-label">{{ item.title }}</span>
-      <!-- <span v-if="item.custom" class="detail-value">{{ item.render(item.dataIndex) }}</span>
-      <span v-else class="detail-value">{{ detailInfo[item.dataIndex] || '--' }}</span> -->
       <span class="detail-value">
-        {{ renderValue(item) }}
-        <span v-if="item.copyable" class="copy-btn" ref="copys" @click="$nextTick(() => {copyValue('.copy-btn', item.key, detailInfo)})"><a-icon type="copy"/></span>
+        <a-tooltip v-if="item.copyable">
+          <template slot="title">
+            {{ detailInfo[item.key] }}
+          </template>
+          {{ renderValue(item) }}
+        </a-tooltip>
+        <span v-else>{{ renderValue(item) }}</span>
+        <span v-if="item.copyable" class="copy-btn" ref="copys" @click="$nextTick(() => {copyValue('.copy-btn', item.key, detailInfo)})"><a-icon type="copy" :style="{'fontSize': '12px'}"/></span>
       </span>
       
     </div>
@@ -56,9 +60,10 @@ export default {
           if (customRender && typeof customRender === 'function') {
             return customRender(key, value);
           }
+          // 实时计时
           if(key == 'time') {
-            this.duration = updateDuration(this.detailInfo.time)
-            return this.duration
+            this.duration = updateDuration(this.detailInfo.time);
+            return this.duration;
           }
   
           return value;
@@ -67,6 +72,7 @@ export default {
       }
       return '';
     },
+    // 计算持续时长
     updateDuration() {
       let duration = moment.duration(this.duration);
       duration.add(1, 'second');

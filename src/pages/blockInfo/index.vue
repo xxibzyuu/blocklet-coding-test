@@ -2,7 +2,7 @@
  * @Description: block页
  * @Author: yuanzeyu
  * @Date: 2023-10-30 17:12:26
- * @LastEditTime: 2023-10-31 18:45:39
+ * @LastEditTime: 2023-10-31 22:52:04
 -->
 <template>
   <div>
@@ -21,7 +21,7 @@
             <h2>{{ detailInfo.block_index }}</h2>
           </div>
           <div class="mine-item">
-            <span class="time-text">Mined on {{ handleTime(detailInfo.time) }}</span>
+            <span class="time-text">Mined on {{ handleTime(detailInfo.time, 'MMMM/DD/YYYY H:mm:ss') }}</span>
             <span class="dot"></span>
             <a class="hash-text">All Blocks</a>
           </div>
@@ -47,29 +47,43 @@
               <div slot="header" class="block-item-header">
                 <div class="item-logo">TX</div>
                 <a-row class="item-content">
-                  <a-col :span="8">
+                  <a-col :sm="24" :md="8" :lg="8">
                     <div class="gd-flex-center">
                       <h4 class="index-text">{{ index }}</h4>
-                      <span class="grey-text">ID:</span><span class="hash-text">{{ handleHash(item.hash) }}</span>
-                      <span class="copy-btn" @click="copyValue('.copy-btn', 'hash', item)"><a-icon type="copy" /></span>
+                      <span class="grey-text">ID：</span><span class="hash-text">{{ handleHash(item.hash) }}</span>
+                      <span :class="`copy-btn${index}`" @click.stop="copyValue(`.copy-btn${index}`, 'hash', item)">
+                        <a-icon type="copy" />
+                      </span>
                     </div>
                     <p class="grey-text">{{ handleTime(item.time) }}</p>
                   </a-col>
-                  <a-col :span="8">
-                    <p>FROM {{ fromInputs(item.inputs) }}<a-icon type="copy" v-if="item.inputs.length > 1" /></p>
-                    <p>TO {{ toOutputs(item.out) }}<a-icon type="copy" v-if="item.out.length > 1" /></p>
+                  <a-col :sm="24" :md="8" :lg="8">
+                    <p>
+                      FROM 
+                      <span :class="item.inputs.length <= 1 ? 'hash-text' : 'grey-text'">{{ fromInputs(item.inputs) }}</span>
+                      <span class="copy-input-btn" v-if="item.inputs.length == 1" @click.stop="copyValue(`.copy-input-btn`, 'script', item.inputs[0])">
+                        <a-icon type="copy" />
+                      </span>
+                    </p>
+                    <p>
+                      To 
+                      <span :class="item.out.length <= 1 ? 'hash-text' : 'grey-text'">{{ toOutputs(item.out) }}</span>
+                      <span class="copy-out-btn" v-if="item.out.length == 1"  @click.stop="copyValue(`.copy-out-btn`, 'script', item.out[0])">
+                        <a-icon type="copy" />
+                      </span>
+                    </p>
                   </a-col>
-                  <a-col :span="8">
+                  <a-col :sm="24" :md="8" :lg="8">
                     <p class="gd-flex-center">
                       <span>0.00130002 BTC</span>
                       <span class="dot"></span>
-                      <span>$44.51</span>
+                      <span class="grey-text">$44.51</span>
                     </p>
                     <p class="gd-flex-center">
                       <span class="fee-text">Fee</span>
                       <span>15.4K Sats</span>
                       <span class="dot"></span>
-                      <span>$5.29</span>
+                      <span class="grey-text">$5.29</span>
                     </p>
                   </a-col>
                 </a-row>
@@ -80,30 +94,32 @@
                     <h3>FROM</h3>
                     <div class="collapse-from">
                       <a-icon type="left-circle" theme="filled" />
-                      <div class="script-item" v-for="(item, index) in item.inputs" :key="index">
-                        <h4 class="index-text">{{ index + 1 }}</h4>
-                        <div class="script-item-column">
-                          <p class="gd-flex-center">
-                            <span class="script">{{ item.script }}</span>
-                            <span class="copy-btn" @click="copyValue('.copy-btn', 'hash', item)"><a-icon type="copy" /></span>
-                          </p>
-                          <p>
-                            <span>0.03900400 BTC</span>
-                            <span class="dot"></span>
-                            <span>$1,335.38</span>
-                          </p>
+                      <div class="collapse-from-item">
+                        <div class="script-item" v-for="(ytem, yndex) in item.inputs" :key="yndex">
+                          <h4 class="index-text">{{ yndex + 1 }}</h4>
+                          <div class="script-item-column">
+                            <p class="gd-flex-center">
+                              <span class="script">{{ ytem.script }}</span>
+                              <span class="copy-btn" v-clipboard:copy.stop="ytem.script" v-clipboard:success="copySuccess" v-clipboard:error="copyError"><a-icon type="copy" /></span>
+                            </p>
+                            <p>
+                              <span>0.03900400 BTC</span>
+                              <span class="dot"></span>
+                              <span>$1,335.38</span>
+                            </p>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </a-col>
                   <a-col :span="11">
-                    <h3>TO</h3>
-                    <div class="script-item" v-for="(item, index) in item.out" :key="index">
-                      <h4 class="index-text">{{ index + 1 }}</h4>
+                    <h3>To</h3>
+                    <div class="script-item" v-for="(ztem, zndex) in item.out" :key="zndex">
+                      <h4 class="index-text">{{ zndex + 1 }}</h4>
                       <div class="script-item-column">
                         <p class="gd-flex-center">
-                          <span class="script">{{ item.script }}</span>
-                          <span @click="copyValue(item.hash, $event)"><a-icon type="copy" /></span>
+                          <span class="script">{{ ztem.script }}</span>
+                          <span class="copy-btn" v-clipboard:copy.stop="ztem.script" v-clipboard:success="copySuccess" v-clipboard:error="copyError"><a-icon type="copy" /></span>
                         </p>
                         <p>
                           <span>0.03900400 BTC</span>
@@ -132,7 +148,8 @@
 <script>
 import { omit, get } from 'lodash';
 import moment from 'moment';
-import { handleHash, copyValue } from '@/utils/utils';
+import VueClipboard from 'vue-clipboard2'
+import { handleHash, copyValue, copySuccess, copyError } from '@/utils/utils';
 import headerComponent from '@/components/headerComponent/index.vue';
 import detailComponent from './detail.vue';
 import { BLOCK_DETAIL_COLUMNS } from '@/static/column';
@@ -148,6 +165,8 @@ export default {
       pageTotal: 0, // 列表总数
       pageSize: 15, //每页显示的条目数
       currentPage: 1, // 当前页数
+      startIndex: 0, // 当前页的起始索引
+      endIndex: 0, // 当前页的结束索引
       isUpdate: false,  // 更新概览的数据
       coinMsg: ',z&gt;mm 1 Yc7&lt;UV $ wYQ: ;Nw5QR/E-Mh  p   /F2Pool/f zkY',
       rawBlock: '00000000000000000007878ec04bb2b2e12317804810f4c26033585b3f81ffaa'
@@ -164,8 +183,19 @@ export default {
     this.getDetail();
   },
   methods: {
+    get,
     handleHash,
     copyValue,
+    copyText(value) {
+      VueClipboard.copy(value)
+      console.log(VueClipboard.success())
+    },
+    copySuccess(e) {
+      copySuccess(e)
+    },
+    copyError(e) {
+      copyError(e)
+    },
     getSearch(value) {
       this.getDetail(value);
     },
@@ -191,12 +221,14 @@ export default {
     },
     handlePageChange(page) {
       this.currentPage = page;
+      this.startIndex = (page - 1) * this.pageSize; // 计算新的起始索引
+      this.endIndex = this.startIndex + this.pageSize; // 计算新的结束索引
     },
     fromInputs(data) {
       if (data.length > 1) {
         return `${data.length} Inputs`;
       } else if (data.length == 1) {
-        return handleHash(get(data[0], 'script'));
+        return handleHash(get(data, '0.script', '--'));
       } else {
         return '--';
       }
@@ -205,14 +237,14 @@ export default {
       if (data.length > 1) {
         return `${data.length} Outputs`;
       } else if (data.length == 1) {
-        return handleHash(get(data[0], 'script'));
+        return handleHash(get(data, '0.script', '--'));
       } else {
         return '--';
       }
     },
-    handleTime(time) {
+    handleTime(time, format = 'MM/DD/yyyy H:mm:ss') {
       const date = moment.unix(time);
-      const formattedDate = date.format('MMMM/DD/YYYY H:mm:ss');
+      const formattedDate = date.format(format);
       return formattedDate;
     }
   },
@@ -256,6 +288,19 @@ export default {
     }
     .item-content {
       flex: 1;
+
+      
+      .ant-col:last-child {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+      }
+      .ant-col-sm-24 {
+        margin-bottom: 10px;
+      }
+      .ant-col.ant-col-sm-24:last-child {
+        display: block;
+      }
     }
   }
 
@@ -276,6 +321,11 @@ export default {
 .collapse-from {
   display: flex;
 
+  &-item {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
   .anticon-left-circle {
     margin-top: 4px;
     margin-right: 10px;

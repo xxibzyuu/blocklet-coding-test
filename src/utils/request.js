@@ -2,10 +2,11 @@
  * @Description: 封装axios
  * @Author: yuanzeyu
  * @Date: 2023-10-30 17:22:56
- * @LastEditTime: 2023-10-31 18:44:45
+ * @LastEditTime: 2023-10-31 22:43:47
  */
 
 import axios from 'axios';
+import { message } from 'ant-design-vue';
 
 // baseURL依据开发环境和生产环境修改
 const instance = axios.create({
@@ -40,12 +41,7 @@ instance.interceptors.response.use(
     } else {
       // 超时提示
       if (error.message.includes('timeout')) {
-        this.$message.alert('请求超时，请稍后重试', '提示', {
-          lockScroll: true,
-          confirmButtonText: '确定',
-          closeOnClickModal: false,
-          closeOnPressEscape: false,
-        });
+        message.error('请求超时，请稍后重试');
         return Promise.reject(error);
       }
     }
@@ -56,16 +52,16 @@ const errorHandle = (status, other) => {
   // 状态码判断
   switch (status) {
     case 400:
-      this.$message.error('请求错误')
+      message.error('请求错误')
       break;
     case 403:
-      this.$message.error('权限不足，拒绝访问')
+      message.error('权限不足，拒绝访问')
       break;
     case 404:
-      this.$message.error('请求的资源不存在或请求地址出错')
+      message.error('请求的资源不存在或请求地址出错')
       break;
     case 500:
-      this.$message.error('服务器错误')
+      message.error('服务器错误')
       break;
     default:
       console.log(other);
