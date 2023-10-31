@@ -2,7 +2,7 @@
  * @Description: block页
  * @Author: yuanzeyu
  * @Date: 2023-10-30 17:12:26
- * @LastEditTime: 2023-10-31 22:52:04
+ * @LastEditTime: 2023-11-01 00:32:49
 -->
 <template>
   <div>
@@ -12,7 +12,7 @@
         <div class="top-item">
           <div class="image-item"></div>
           <div class="next-btn" @click="toNext">
-            <a-icon type="right-circle" :style="{'fontSize': '30px', 'color': 'black'}"></a-icon>
+            <a-icon type="right-circle" :style="{ fontSize: '30px', color: 'black' }"></a-icon>
           </div>
         </div>
         <div class="gd-flex-c">
@@ -31,7 +31,12 @@
             <span class="dot"></span>
             <span>{{ coinMsg }}</span>
           </div>
-          <span class="grey-text">A total of 4,813.14 BTC ($164,787,971) were sent in the block with the average transaction being 1.5895 BTC ($54,419.90). F2Pool earned a total reward of 6.25 BTC $213,982. The reward consisted of a base reward of 6.25 BTC $213,982 with an additional 0.1235 BTC ($4,228.28) reward paid as fees of the 3,028 transactions which were included in the block.</span>
+          <span class="grey-text"
+            >A total of 4,813.14 BTC ($164,787,971) were sent in the block with the average transaction being 1.5895 BTC
+            ($54,419.90). F2Pool earned a total reward of 6.25 BTC $213,982. The reward consisted of a base reward of
+            6.25 BTC $213,982 with an additional 0.1235 BTC ($4,228.28) reward paid as fees of the 3,028 transactions
+            which were included in the block.</span
+          >
         </div>
       </div>
 
@@ -59,16 +64,24 @@
                   </a-col>
                   <a-col :sm="24" :md="8" :lg="8">
                     <p>
-                      FROM 
-                      <span :class="item.inputs.length <= 1 ? 'hash-text' : 'grey-text'">{{ fromInputs(item.inputs) }}</span>
-                      <span class="copy-input-btn" v-if="item.inputs.length == 1" @click.stop="copyValue(`.copy-input-btn`, 'script', item.inputs[0])">
+                      FROM
+                      <span :class="item.inputs.length <= 1 ? 'hash-text' : 'grey-text'">{{
+                        fromInputs(item.inputs)
+                      }}</span>
+                      <span
+                        class="copy-input-btn"
+                        v-if="item.inputs.length == 1"
+                        @click.stop="copyValue(`.copy-input-btn`, 'script', item.inputs[0])">
                         <a-icon type="copy" />
                       </span>
                     </p>
                     <p>
-                      To 
+                      To
                       <span :class="item.out.length <= 1 ? 'hash-text' : 'grey-text'">{{ toOutputs(item.out) }}</span>
-                      <span class="copy-out-btn" v-if="item.out.length == 1"  @click.stop="copyValue(`.copy-out-btn`, 'script', item.out[0])">
+                      <span
+                        class="copy-out-btn"
+                        v-if="item.out.length == 1"
+                        @click.stop="copyValue(`.copy-out-btn`, 'script', item.out[0])">
                         <a-icon type="copy" />
                       </span>
                     </p>
@@ -100,7 +113,13 @@
                           <div class="script-item-column">
                             <p class="gd-flex-center">
                               <span class="script">{{ ytem.script }}</span>
-                              <span class="copy-btn" v-clipboard:copy.stop="ytem.script" v-clipboard:success="copySuccess" v-clipboard:error="copyError"><a-icon type="copy" /></span>
+                              <span
+                                class="copy-btn"
+                                v-clipboard:copy.stop="ytem.script"
+                                v-clipboard:success="copySuccess"
+                                v-clipboard:error="copyError"
+                                ><a-icon type="copy"
+                              /></span>
                             </p>
                             <p>
                               <span>0.03900400 BTC</span>
@@ -119,7 +138,13 @@
                       <div class="script-item-column">
                         <p class="gd-flex-center">
                           <span class="script">{{ ztem.script }}</span>
-                          <span class="copy-btn" v-clipboard:copy.stop="ztem.script" v-clipboard:success="copySuccess" v-clipboard:error="copyError"><a-icon type="copy" /></span>
+                          <span
+                            class="copy-btn"
+                            v-clipboard:copy.stop="ztem.script"
+                            v-clipboard:success="copySuccess"
+                            v-clipboard:error="copyError"
+                            ><a-icon type="copy"
+                          /></span>
                         </p>
                         <p>
                           <span>0.03900400 BTC</span>
@@ -138,6 +163,7 @@
             :current="currentPage"
             :total="pageTotal"
             :pageSize="15"
+            class="custom-pagination"
             @change="handlePageChange" />
         </div>
       </div>
@@ -148,7 +174,7 @@
 <script>
 import { omit, get } from 'lodash';
 import moment from 'moment';
-import VueClipboard from 'vue-clipboard2'
+import VueClipboard from 'vue-clipboard2';
 import { handleHash, copyValue, copySuccess, copyError } from '@/utils/utils';
 import headerComponent from '@/components/headerComponent/index.vue';
 import detailComponent from './detail.vue';
@@ -167,9 +193,9 @@ export default {
       currentPage: 1, // 当前页数
       startIndex: 0, // 当前页的起始索引
       endIndex: 0, // 当前页的结束索引
-      isUpdate: false,  // 更新概览的数据
+      isUpdate: false, // 更新概览的数据
       coinMsg: ',z&gt;mm 1 Yc7&lt;UV $ wYQ: ;Nw5QR/E-Mh  p   /F2Pool/f zkY',
-      rawBlock: '00000000000000000007878ec04bb2b2e12317804810f4c26033585b3f81ffaa'
+      rawBlock: '00000000000000000007878ec04bb2b2e12317804810f4c26033585b3f81ffaa',
     };
   },
   computed: {
@@ -187,37 +213,35 @@ export default {
     handleHash,
     copyValue,
     copyText(value) {
-      VueClipboard.copy(value)
-      console.log(VueClipboard.success())
+      VueClipboard.copy(value);
+      console.log(VueClipboard.success());
     },
     copySuccess(e) {
-      copySuccess(e)
+      copySuccess(e);
     },
     copyError(e) {
-      copyError(e)
+      copyError(e);
     },
     getSearch(value) {
       this.getDetail(value);
     },
     toNext() {
-      const nextBlock = get(this.detailInfo.next_block, '0')
-      this.getDetail(nextBlock)
+      const nextBlock = get(this.detailInfo.next_block, '0');
+      this.getDetail(nextBlock);
     },
     getDetail(rawBlock = '00000000000000000007878ec04bb2b2e12317804810f4c26033585b3f81ffaa') {
-      this.$NProgress.start()
-      this.isUpdate = false
-      this.$axios
-        .get(`/rawblock/${rawBlock}`)
-        .then((res) => {
-          console.log(res);
-          this.detailInfo = omit(res.data, 'tx')
-          this.tx = res.data.tx;
-          this.pageTotal = this.tx.length;
-          this.$NProgress.done()
-          this.$nextTick(() => {
-            this.isUpdate = true
-          })
+      this.$NProgress.start();
+      this.isUpdate = false;
+      this.$axios.get(`/rawblock/${rawBlock}`).then((res) => {
+        console.log(res);
+        this.detailInfo = omit(res.data, 'tx');
+        this.tx = res.data.tx;
+        this.pageTotal = this.tx.length;
+        this.$NProgress.done();
+        this.$nextTick(() => {
+          this.isUpdate = true;
         });
+      });
     },
     handlePageChange(page) {
       this.currentPage = page;
@@ -246,7 +270,7 @@ export default {
       const date = moment.unix(time);
       const formattedDate = date.format(format);
       return formattedDate;
-    }
+    },
   },
 };
 </script>
@@ -262,7 +286,10 @@ export default {
   width: 100px;
   height: 100px;
   border-radius: 8%;
-  background-image: linear-gradient(21deg, rgba(255, 188, 136, 0.8), rgba(255, 188, 136, 0.2) 10.71%), linear-gradient(249.20000000000002deg, rgba(255, 188, 136, 0.8), rgba(255, 255, 255, 0) 70.71%), linear-gradient(142.4deg, rgba(255, 159, 117, 0.8), rgba(255, 197, 149, 0.2) 70.71%), linear-gradient(37deg, rgba(255, 99, 122, 0.8), rgba(255, 188, 136, 0.2) 70.71%);
+  background-image: linear-gradient(21deg, rgba(255, 188, 136, 0.8), rgba(255, 188, 136, 0.2) 10.71%),
+    linear-gradient(249.20000000000002deg, rgba(255, 188, 136, 0.8), rgba(255, 255, 255, 0) 70.71%),
+    linear-gradient(142.4deg, rgba(255, 159, 117, 0.8), rgba(255, 197, 149, 0.2) 70.71%),
+    linear-gradient(37deg, rgba(255, 99, 122, 0.8), rgba(255, 188, 136, 0.2) 70.71%);
 }
 .mine-item {
   display: flex;
@@ -272,11 +299,11 @@ export default {
 .block-item {
   padding: 20px;
   border-bottom: 1px solid rgb(238, 238, 238);
-
+  h3 {
+    margin-bottom: 10px !important;
+  }
   &-header {
     display: flex;
-    /* justify-content: space-between; */
-
     .item-logo {
       width: 40px;
       height: 40px;
@@ -288,8 +315,6 @@ export default {
     }
     .item-content {
       flex: 1;
-
-      
       .ant-col:last-child {
         display: flex;
         flex-direction: column;
@@ -303,12 +328,10 @@ export default {
       }
     }
   }
-
   &-collapse {
     .ant-row {
       display: flex;
       border-top: 1px solid rgb(238, 238, 238);
-
       .ant-col {
         padding: 10px 20px;
       }
@@ -333,7 +356,6 @@ export default {
 }
 .collapse-script {
   width: 48%;
-
   .divider {
     height: auto;
   }
@@ -348,7 +370,6 @@ export default {
     flex-direction: column;
     overflow: hidden;
   }
-
   .script {
     width: 80%;
     overflow: hidden;
@@ -387,5 +408,9 @@ export default {
   border-radius: 30px;
   margin-bottom: 6px;
 }
-
+/* 分页的样式重置 */
+.custom-pagination.ant-pagination.mini {
+  text-align: center;
+  margin-top: 30px 0;
+}
 </style>
