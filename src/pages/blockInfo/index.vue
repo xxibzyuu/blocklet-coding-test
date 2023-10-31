@@ -1,33 +1,43 @@
 <!--
- * @Description: 
+ * @Description: block页
  * @Author: yuanzeyu
  * @Date: 2023-10-30 17:12:26
- * @LastEditTime: 2023-10-31 13:45:13
+ * @LastEditTime: 2023-10-31 18:45:39
 -->
 <template>
   <div>
-    <header-component :isShow="showSearch"></header-component>
+    <header-component @search="getSearch"></header-component>
     <div>
       <div class="block-item gd-flex-c">
-        <div class="">
-          <div></div>
-          <image></image>
+        <div class="top-item">
+          <div class="image-item"></div>
+          <div class="next-btn" @click="toNext">
+            <a-icon type="right-circle" :style="{'fontSize': '30px', 'color': 'black'}"></a-icon>
+          </div>
         </div>
         <div class="gd-flex-c">
-          <div class="gd-flex-center">
+          <div class="mine-item">
             <h1>Bitcoin Block</h1>
-            <h2>814,501</h2>
-            <!-- <span class="name-text">Bitcoin Block</span>
-            <span class="num-text">814,501</span> -->
+            <h2>{{ detailInfo.block_index }}</h2>
           </div>
-          <span class="time-text">Mined on {{ detailInfo.time }}</span>
+          <div class="mine-item">
+            <span class="time-text">Mined on {{ handleTime(detailInfo.time) }}</span>
+            <span class="dot"></span>
+            <a class="hash-text">All Blocks</a>
+          </div>
           <button class="mine-btn">F2Pool</button>
+          <div class="mine-item">
+            <span class="msg-text">Coinbase Message</span>
+            <span class="dot"></span>
+            <span>{{ coinMsg }}</span>
+          </div>
+          <span class="grey-text">A total of 4,813.14 BTC ($164,787,971) were sent in the block with the average transaction being 1.5895 BTC ($54,419.90). F2Pool earned a total reward of 6.25 BTC $213,982. The reward consisted of a base reward of 6.25 BTC $213,982 with an additional 0.1235 BTC ($4,228.28) reward paid as fees of the 3,028 transactions which were included in the block.</span>
         </div>
       </div>
 
       <div class="block-item">
         <h3>details</h3>
-        <detail-component :detailInfo="detailInfo"></detail-component>
+        <detail-component :isUpdate="isUpdate" :detailInfo="detailInfo"></detail-component>
       </div>
       <div class="block-item">
         <h3>Transactions</h3>
@@ -41,7 +51,7 @@
                     <div class="gd-flex-center">
                       <h4 class="index-text">{{ index }}</h4>
                       <span class="grey-text">ID:</span><span class="hash-text">{{ handleHash(item.hash) }}</span>
-                      <span @click="copyValue(item.hash, $event)"><a-icon type="copy" /></span>
+                      <span class="copy-btn" @click="copyValue('.copy-btn', 'hash', item)"><a-icon type="copy" /></span>
                     </div>
                     <p class="grey-text">{{ handleTime(item.time) }}</p>
                   </a-col>
@@ -63,31 +73,6 @@
                     </p>
                   </a-col>
                 </a-row>
-                <!-- <div class="item-content">
-                  <div class="gd-flex-center">
-                    <h4 class="index-text">{{ index }}</h4>
-                    <span class="grey-text">ID:</span><span class="hash-text">{{ handleHash(item.hash) }}</span>
-                    <span @click="copyValue(item.hash, $event)"><a-icon type="copy" /></span>
-                  </div>
-                  <p class="grey-text">{{ handleTime(item.time) }}</p>
-                </div>
-                <div class="item-content">
-                  <p>FROM {{ fromInputs(item.inputs) }}<a-icon type="copy" v-if="item.inputs.length > 1" /></p>
-                  <p>TO {{ toOutputs(item.out) }}<a-icon type="copy" v-if="item.out.length > 1" /></p>
-                </div>
-                <div class="item-content">
-                  <p class="gd-flex-center">
-                    <span>0.00130002 BTC</span>
-                    <span class="dot"></span>
-                    <span>$44.51</span>
-                  </p>
-                  <p class="gd-flex-center">
-                    <span class="fee-text">Fee</span>
-                    <span>15.4K Sats</span>
-                    <span class="dot"></span>
-                    <span>$5.29</span>
-                  </p>
-                </div> -->
               </div>
               <div class="block-item-collapse">
                 <a-row>
@@ -100,7 +85,7 @@
                         <div class="script-item-column">
                           <p class="gd-flex-center">
                             <span class="script">{{ item.script }}</span>
-                            <span @click="copyValue(item.hash, $event)"><a-icon type="copy" /></span>
+                            <span class="copy-btn" @click="copyValue('.copy-btn', 'hash', item)"><a-icon type="copy" /></span>
                           </p>
                           <p>
                             <span>0.03900400 BTC</span>
@@ -129,32 +114,6 @@
                     </div>
                   </a-col>
                 </a-row>
-                <!-- <div class="collapse-script">
-                  <h3>FROM</h3>
-                  <a-icon></a-icon>
-                  <div class="script-item" v-for="(item, index) in item.inputs" :key="index">
-                    <h4 class="index-text">{{ index+1 }}</h4>
-                    <div class="script-item-column">
-                      <p class="gd-flex-center">
-                        <span class="script">{{ item.script }}</span>
-                        <span @click="copyValue(item.hash, $event)"><a-icon type="copy" /></span></p>
-                      <p>BTC</p>
-                    </div>
-                  </div>
-                </div>
-                <a-divider type="vertical" class="divider" />
-                <div class="collapse-script">
-                  <h3>TO</h3>
-                  <div class="script-item" v-for="(item, index) in item.out" :key="index">
-                    <h4>{{ index+1 }}</h4>
-                    <div class="script-item-column">
-                      <p class="gd-flex-center">
-                        <span class="script">{{ item.script }}</span>
-                        <span @click="copyValue(item.hash, $event)"><a-icon type="copy" /></span></p>
-                      <p>BTC</p>
-                    </div>
-                  </div>
-                </div> -->
               </div>
             </a-collapse-panel>
           </a-collapse>
@@ -171,11 +130,10 @@
 </template>
 
 <script>
-import { omit, get, mapKeys } from 'lodash';
+import { omit, get } from 'lodash';
 import moment from 'moment';
-import Clipboard from 'clipboard';
-import { handleHash } from '@/utils/utils';
-import headerComponent from '@/components/header/index.vue';
+import { handleHash, copyValue } from '@/utils/utils';
+import headerComponent from '@/components/headerComponent/index.vue';
 import detailComponent from './detail.vue';
 import { BLOCK_DETAIL_COLUMNS } from '@/static/column';
 export default {
@@ -190,7 +148,9 @@ export default {
       pageTotal: 0, // 列表总数
       pageSize: 15, //每页显示的条目数
       currentPage: 1, // 当前页数
-      showSearch: false,
+      isUpdate: false,  // 更新概览的数据
+      coinMsg: ',z&gt;mm 1 Yc7&lt;UV $ wYQ: ;Nw5QR/E-Mh  p   /F2Pool/f zkY',
+      rawBlock: '00000000000000000007878ec04bb2b2e12317804810f4c26033585b3f81ffaa'
     };
   },
   computed: {
@@ -201,42 +161,36 @@ export default {
     },
   },
   mounted() {
-    this.getDetail(0);
-    window.addEventListener('resize', this.handleResize);
-    this.handleResize();
-  },
-  beforeDestroy() {
-    window.removeEventListener('resize', this.handleResize);
+    this.getDetail();
   },
   methods: {
-    getDetail() {
+    handleHash,
+    copyValue,
+    getSearch(value) {
+      this.getDetail(value);
+    },
+    toNext() {
+      const nextBlock = get(this.detailInfo.next_block, '0')
+      this.getDetail(nextBlock)
+    },
+    getDetail(rawBlock = '00000000000000000007878ec04bb2b2e12317804810f4c26033585b3f81ffaa') {
+      this.$NProgress.start()
+      this.isUpdate = false
       this.$axios
-        .get('https://blockchain.info/rawblock/00000000000000000007878ec04bb2b2e12317804810f4c26033585b3f81ffaa')
+        .get(`/rawblock/${rawBlock}`)
         .then((res) => {
           console.log(res);
-          this.detailInfo = mapKeys(omit(res.data, 'tx'), (value, key) => {
-            if (key == 'time') {
-              this.detailInfo[key] = moment(this.detailInfo[key]).format('LLLL');
-            }
-          });
+          this.detailInfo = omit(res.data, 'tx')
           this.tx = res.data.tx;
           this.pageTotal = this.tx.length;
+          this.$NProgress.done()
+          this.$nextTick(() => {
+            this.isUpdate = true
+          })
         });
     },
-    setCurrentList() {},
-
     handlePageChange(page) {
       this.currentPage = page;
-    },
-    handleItem(item) {
-      switch (item.dataIndex) {
-        case 'hash':
-          return handleHash(this.detailInfo[item.dataIndex]);
-        // break;
-
-        default:
-          return `--`;
-      }
     },
     fromInputs(data) {
       if (data.length > 1) {
@@ -256,46 +210,33 @@ export default {
         return '--';
       }
     },
-    // handleHash(data) {
-    //   if(data) {
-    //     const start = data.substring(0, 4);
-    //     const end = data.substring(data.length - 4, data.length);
-    //     return `${start}-${end}`;
-    //   }else {
-    //     return '--'
-    //   }
-    // },
     handleTime(time) {
-      return moment(time).format('MM/DD YYYY hh:mm:ss');
-    },
-    copyValue(value, event) {
-      console.log(event);
-      const clipboard = new Clipboard(event.target, {
-        text: () => value,
-      });
-
-      clipboard.on('success', () => {
-        console.log('复制成功');
-        clipboard.destroy();
-      });
-
-      clipboard.on('error', () => {
-        console.log('复制失败');
-        clipboard.destroy();
-      });
-
-      clipboard.onClick(this.$el);
-      // this.$clipBoard(value)
-    },
-    handleResize() {
-      this.showSearch = window.innerWidth >= 840;
-    },
+      const date = moment.unix(time);
+      const formattedDate = date.format('MMMM/DD/YYYY H:mm:ss');
+      return formattedDate;
+    }
   },
 };
 </script>
 
 <style lang="scss" scoped>
 @import '@/assets/mixins.scss';
+.top-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.image-item {
+  width: 100px;
+  height: 100px;
+  border-radius: 8%;
+  background-image: linear-gradient(21deg, rgba(255, 188, 136, 0.8), rgba(255, 188, 136, 0.2) 10.71%), linear-gradient(249.20000000000002deg, rgba(255, 188, 136, 0.8), rgba(255, 255, 255, 0) 70.71%), linear-gradient(142.4deg, rgba(255, 159, 117, 0.8), rgba(255, 197, 149, 0.2) 70.71%), linear-gradient(37deg, rgba(255, 99, 122, 0.8), rgba(255, 188, 136, 0.2) 70.71%);
+}
+.mine-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 6px;
+}
 .block-item {
   padding: 20px;
   border-bottom: 1px solid rgb(238, 238, 238);
@@ -334,6 +275,11 @@ export default {
 }
 .collapse-from {
   display: flex;
+
+  .anticon-left-circle {
+    margin-top: 4px;
+    margin-right: 10px;
+  }
 }
 .collapse-script {
   width: 48%;
@@ -359,6 +305,9 @@ export default {
     text-overflow: ellipsis;
     color: rgb(237, 155, 96);
   }
+  .index-text {
+    margin-right: 10px !important;
+  }
 }
 .index-text {
   margin-right: 4px !important;
@@ -380,9 +329,13 @@ export default {
   @include custom-text(14px, rgb(244, 91, 105));
 }
 .mine-btn {
-  width: 120px;
+  width: 90px;
+  height: 30px;
   background-color: rgba(237, 155, 96, 0.15);
   color: rgb(237, 155, 96);
   border: none;
+  border-radius: 30px;
+  margin-bottom: 6px;
 }
+
 </style>

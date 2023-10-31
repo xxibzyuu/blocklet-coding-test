@@ -1,7 +1,3 @@
-p {
-  margin: 0 !important;
-}
-
 .gd-flex-center {
   display: flex;
   flex-direction: row;
@@ -20,3 +16,9 @@ p {
   background: #ccc;
   margin: 0 5px;
 }
+
+.slide-fade-enter-active {
+  transition: all 0.5s ease;
+}
+
+

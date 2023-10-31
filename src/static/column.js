@@ -1,4 +1,4 @@
-import { handleHash } from '@/utils/utils';
+import { handleHash, updateDuration } from '@/utils/utils';
 
 export const COLUMNS = [
   {
@@ -23,8 +23,8 @@ export const BLOCK_DETAIL_COLUMNS = [
   },
   {
     title: 'Distance',
-    dataIndex: 'distance',
-    key: 'distance',
+    dataIndex: 'time',
+    key: 'time'
   },
   {
     title: 'BTC',
@@ -298,6 +298,9 @@ function customRender(key, value) {
   // 自定义渲染方法
   if (key === 'hash') {
     return handleHash(value);
+  }
+  if(key === 'time') {
+    return updateDuration(value)
   }
   // 其他自定义渲染逻辑...
 }
