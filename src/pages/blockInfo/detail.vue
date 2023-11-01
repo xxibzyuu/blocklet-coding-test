@@ -2,7 +2,7 @@
  * @Description: block概要
  * @Author: yuanzeyu
  * @Date: 2023-10-31 08:44:17
- * @LastEditTime: 2023-11-01 12:56:21
+ * @LastEditTime: 2023-11-01 17:27:39
 -->
 <template>
   <div class="detail-list">
@@ -28,6 +28,7 @@
 import { BLOCK_DETAIL_COLUMNS } from '@/static/column';
 import { updateDuration, copyTextToClipboard } from '@/utils/utils';
 import moment from 'moment';
+import { has } from 'lodash';
 
 export default {
   name: 'blockDetail',
@@ -55,7 +56,7 @@ export default {
         const key = item.key;
         const customRender = item.render;
 
-        if (Object.property.hasOwnProperty.call(this.detailInfo, key)) {
+        if (has(this.detailInfo, key)) {
           let value = this.detailInfo[key];
 
           if (customRender && typeof customRender === 'function') {

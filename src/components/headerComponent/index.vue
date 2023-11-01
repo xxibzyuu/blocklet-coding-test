@@ -1,13 +1,11 @@
 <!--
- * @Description: 
+ * @Description: 顶部搜索框
  * @Author: yuanzeyu
  * @Date: 2023-10-30 17:14:56
- * @LastEditTime: 2023-10-31 18:16:00
+ * @LastEditTime: 2023-11-01 18:26:02
 -->
 <template>
   <div class="header">
-    <!-- <a-row> -->
-    <!-- <a-col :span="10" :offset="6"> -->
     <div :class="['search-container', { center: showSearch }]">
       <transition name="slide-fade">
         <a-input-search
@@ -18,34 +16,30 @@
           placeholder="Search Blockchain, Transaction, Address and Blocks"
           @search="onSearch"
           @blur="hideSearch">
-          <a-button slot="enterButton" class="enter-btn">
-            <a-icon type="search" />
-          </a-button>
+          <a-button slot="enterButton" class="enter-btn" icon="search" :loading="loading"> </a-button>
         </a-input-search>
       </transition>
-      <!-- <a-icon type="bulb" :style="{ fontSize: '24px', color: '#000', margin: '0 10px' }" /> -->
-      <a-icon v-if="!showSearch" type="search" :style="{ fontSize: '24px', color: '#000', marginRight: '10px' }" @click="toggleSearch" />
+      <a-icon
+        v-if="!showSearch"
+        type="search"
+        :style="{ fontSize: '24px', color: '#000', marginRight: '10px' }"
+        @click="toggleSearch" />
     </div>
-    <button class="sign-btn"><a-icon type="user" /> Sign in</button>
+    <!-- <button class="sign-btn"><a-icon type="user" /> Sign in</button> -->
   </div>
 </template>
 
 <script>
 export default {
   name: 'headerComponent',
-  props: ['isShow'],
+  props: ['loading'],
   data() {
     return {
       showSearch: false,
       smallWidth: false,
       showBulb: false,
-      searchName: ''
+      searchName: '',
     };
-  },
-  watch: {
-    isShow() {
-      // this.showSearch = this.isShow;
-    },
   },
   mounted() {
     window.addEventListener('resize', this.handleResize);
@@ -54,25 +48,18 @@ export default {
   beforeDestroy() {
     window.removeEventListener('resize', this.handleResize);
   },
-  // methods: {
-  //   handleResize() {
-  //     this.showSearch = window.innerWidth >= 840;
-  //   },
-  // }
   methods: {
     handleResize() {
-      if(window.innerWidth >= 840) {
+      if (window.innerWidth >= 840) {
         this.showSearch = true;
         this.smallWidth = false;
       } else {
         this.showSearch = false;
         this.smallWidth = true;
       }
-      // this.showSearch = window.innerWidth >= 840;
-      // this.smallWidth = window.innerWidth < 840
     },
     onSearch() {
-      this.$emit('search', this.searchName)
+      this.$emit('search', this.searchName);
     },
     toggleSearch() {
       this.showBulb = false;
@@ -82,7 +69,7 @@ export default {
       });
     },
     hideSearch() {
-      if(this.smallWidth) {
+      if (this.smallWidth) {
         this.showSearch = false;
       }
     },
@@ -102,9 +89,22 @@ export default {
     height: 40px;
     border-radius: 30px;
 
+    .ant-input {
+      border-top-left-radius: 32px;
+      border-bottom-left-radius: 32px;
+    }
+    .ant-btn {
+      border-top-right-radius: 32px;
+      border-bottom-right-radius: 32px;
+    }
     .enter-btn {
       width: 50px;
       height: 40px;
+      color: #000;
+      font-size: 18px;
+      background: rgb(238, 238, 238);
+    }
+    .enter-btn:hover {
       background: rgba(0, 0, 0, 0.1);
     }
   }

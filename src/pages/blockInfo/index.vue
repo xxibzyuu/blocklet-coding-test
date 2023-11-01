@@ -2,12 +2,19 @@
  * @Description: block页
  * @Author: yuanzeyu
  * @Date: 2023-10-30 17:12:26
- * @LastEditTime: 2023-11-01 12:53:07
+ * @LastEditTime: 2023-11-01 18:46:51
 -->
 <template>
-  <div>
-    <header-component @search="getSearch"></header-component>
-    <div>
+  <div class="container">
+    <header-component @search="getSearch" :loading="spinning"></header-component>
+    <a-spin :spinning="spinning" size="large"></a-spin>
+    <div v-if="spinning" class="empty-item">
+      <h1>We are looking for...</h1>
+    </div>
+    <div v-if="!spinning && detailInfo == null" class="empty-item">
+      <h1>We couldn't find what you are looking for...</h1>
+    </div>
+    <div v-if="!spinning && detailInfo">
       <div class="block-item gd-flex-c">
         <div class="top-item">
           <div class="image-item"></div>
@@ -41,123 +48,12 @@
       </div>
 
       <div class="block-item">
-        <h3>details</h3>
+        <h3>Details</h3>
         <detail-component :isUpdate="isUpdate" :detailInfo="detailInfo"></detail-component>
       </div>
       <div class="block-item">
         <h3>Transactions</h3>
-        <div>
-          <a-collapse expandIconPosition="right" :bordered="false">
-            <a-collapse-panel :key="index" v-for="(item, index) in paginatedData">
-              <div slot="header" class="block-item-header">
-                <div class="item-logo">TX</div>
-                <a-row class="item-content">
-                  <a-col :sm="24" :md="8" :lg="8">
-                    <div class="gd-flex-center">
-                      <h4 class="index-text">{{ index }}</h4>
-                      <span class="grey-text">ID：</span><span class="hash-text">{{ handleHash(item.hash) }}</span>
-                      <button :class="`copy-hash-btn`" @click.stop="copyTextToClipboard(item.hash)">
-                        <a-icon type="copy" />
-                      </button>
-                    </div>
-                    <p class="grey-text">{{ handleTime(item.time) }}</p>
-                  </a-col>
-                  <a-col :sm="24" :md="8" :lg="8">
-                    <p>
-                      FROM
-                      <span :class="item.inputs.length <= 1 ? 'hash-text' : 'grey-text'">{{
-                        fromInputs(item.inputs)
-                      }}</span>
-                      <span
-                        class="copy-input-btn"
-                        v-if="item.inputs.length == 1"
-                        @click.stop="copyTextToClipboard(get(item.inputs, '0.script'))">
-                        <a-icon type="copy" />
-                      </span>
-                    </p>
-                    <p>
-                      To
-                      <span :class="item.out.length <= 1 ? 'hash-text' : 'grey-text'">{{ toOutputs(item.out) }}</span>
-                      <span
-                        class="copy-out-btn"
-                        v-if="item.out.length == 1"
-                        @click.stop="copyTextToClipboard(get(item.out, '0.script'))">
-                        <a-icon type="copy" />
-                      </span>
-                    </p>
-                  </a-col>
-                  <a-col :sm="24" :md="8" :lg="8">
-                    <p class="gd-flex-center">
-                      <span>0.00130002 BTC</span>
-                      <span class="dot"></span>
-                      <span class="grey-text">$44.51</span>
-                    </p>
-                    <p class="gd-flex-center">
-                      <span class="fee-text">Fee</span>
-                      <span>15.4K Sats</span>
-                      <span class="dot"></span>
-                      <span class="grey-text">$5.29</span>
-                    </p>
-                  </a-col>
-                </a-row>
-              </div>
-              <div class="block-item-collapse">
-                <a-row>
-                  <a-col :span="11">
-                    <h3>FROM</h3>
-                    <div class="collapse-from">
-                      <a-icon type="left-circle" theme="filled" />
-                      <div class="collapse-from-item">
-                        <div class="script-item" v-for="(ytem, yndex) in item.inputs" :key="yndex">
-                          <h4 class="index-text">{{ yndex + 1 }}</h4>
-                          <div class="script-item-column">
-                            <p class="gd-flex-center">
-                              <span class="script">{{ ytem.script }}</span>
-                              <span class="copy-btn" @click.stop="copyTextToClipboard(ytem.script)">
-                                <a-icon type="copy" />
-                              </span>
-                            </p>
-                            <p>
-                              <span>0.03900400 BTC</span>
-                              <span class="dot"></span>
-                              <span>$1,335.38</span>
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </a-col>
-                  <a-col :span="11">
-                    <h3>To</h3>
-                    <div class="script-item" v-for="(ztem, zndex) in item.out" :key="zndex">
-                      <h4 class="index-text">{{ zndex + 1 }}</h4>
-                      <div class="script-item-column">
-                        <p class="gd-flex-center">
-                          <span class="script">{{ ztem.script }}</span>
-                          <span class="copy-btn" @click.stop="copyTextToClipboard(ztem.script)">
-                            <a-icon type="copy" />
-                          </span>
-                        </p>
-                        <p>
-                          <span>0.03900400 BTC</span>
-                          <span class="dot"></span>
-                          <span>$1,335.38</span>
-                        </p>
-                      </div>
-                    </div>
-                  </a-col>
-                </a-row>
-              </div>
-            </a-collapse-panel>
-          </a-collapse>
-          <a-pagination
-            size="small"
-            :current="currentPage"
-            :total="pageTotal"
-            :pageSize="15"
-            class="custom-pagination"
-            @change="handlePageChange" />
-        </div>
+        <transaction-component :isUpdate="isUpdate" :list="tx"></transaction-component>
       </div>
     </div>
   </div>
@@ -168,13 +64,15 @@ import { omit, get } from 'lodash';
 import { handleHash, copyValue, handleTime, handleNum, copyTextToClipboard } from '@/utils/utils';
 import headerComponent from '@/components/headerComponent/index.vue';
 import detailComponent from './detail.vue';
+import transactionComponent from './transaction.vue';
 import { BLOCK_DETAIL_COLUMNS } from '@/static/column';
 export default {
   name: 'blockInfo',
-  components: { headerComponent, detailComponent },
+  components: { headerComponent, detailComponent, transactionComponent },
   data() {
     return {
       BLOCK_DETAIL_COLUMNS,
+      spinning: false, // 加载中效果
       detailInfo: {}, // 概况信息
       tx: [], // 交易列表
       transactionList: [], // 分页后的交易列表
@@ -213,43 +111,28 @@ export default {
       this.getDetail(nextBlock);
     },
     getDetail(rawBlock = '00000000000000000007878ec04bb2b2e12317804810f4c26033585b3f81ffaa') {
-      this.$NProgress.start();
+      this.spinning = true;
+      // this.$NProgress.start();
       this.isUpdate = false;
-      this.$axios.get(`/rawblock/${rawBlock}`).then((res) => {
-        console.log(res);
-        this.detailInfo = omit(res.data, 'tx');
-        this.tx = res.data.tx;
-        this.pageTotal = this.tx.length;
-        this.$NProgress.done();
-        this.$nextTick(() => {
-          this.isUpdate = true;
-          this.detailInfo.minedTime = handleTime(this.detailInfo.time, 'MMMM/DD/YYYY H:mm:ss');
-          this.detailInfo.block_index = handleNum(this.detailInfo.block_index);
+      this.$axios
+        .get(`/rawblock/${rawBlock}`)
+        .then((res) => {
+          console.log(res);
+          this.detailInfo = omit(res.data, 'tx');
+          this.tx = res.data.tx;
+          this.pageTotal = this.tx.length;
+          // this.$NProgress.done();
+          this.spinning = false;
+          this.$nextTick(() => {
+            this.isUpdate = true;
+            this.detailInfo.minedTime = handleTime(this.detailInfo.time, 'MMMM/DD/YYYY H:mm:ss');
+            this.detailInfo.block_index = handleNum(this.detailInfo.block_index);
+          });
+        })
+        .catch(() => {
+          this.detailInfo = null;
+          this.spinning = false;
         });
-      });
-    },
-    handlePageChange(page) {
-      this.currentPage = page;
-      this.startIndex = (page - 1) * this.pageSize; // 计算新的起始索引
-      this.endIndex = this.startIndex + this.pageSize; // 计算新的结束索引
-    },
-    fromInputs(data) {
-      if (data.length > 1) {
-        return `${data.length} Inputs`;
-      } else if (data.length == 1) {
-        return handleHash(get(data, '0.script', '--'));
-      } else {
-        return '--';
-      }
-    },
-    toOutputs(data) {
-      if (data.length > 1) {
-        return `${data.length} Outputs`;
-      } else if (data.length == 1) {
-        return handleHash(get(data, '0.script', '--'));
-      } else {
-        return '--';
-      }
     },
   },
 };
@@ -257,6 +140,17 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/assets/mixins.scss';
+.empty-item {
+  margin: 15% auto;
+  text-align: center;
+}
+.ant-spin {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
 .top-item {
   display: flex;
   justify-content: space-between;
@@ -291,120 +185,5 @@ export default {
   h3 {
     margin-bottom: 10px !important;
   }
-  &-header {
-    display: flex;
-    .item-logo {
-      width: 40px;
-      height: 40px;
-      line-height: 40px;
-      text-align: center;
-      margin-right: 20px;
-      border: 1px solid rgb(153, 153, 153);
-      border-radius: 50%;
-    }
-    .item-content {
-      flex: 1;
-      .ant-col:last-child {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-      }
-      .ant-col-sm-24 {
-        margin-bottom: 10px;
-      }
-      .ant-col.ant-col-sm-24:last-child {
-        display: block;
-      }
-    }
-  }
-  &-collapse {
-    .ant-row {
-      display: flex;
-      border-top: 1px solid rgb(238, 238, 238);
-      .ant-col {
-        padding: 10px 20px;
-      }
-      .ant-col:last-child {
-        border-left: 1px solid rgb(238, 238, 238);
-      }
-    }
-  }
-}
-.collapse-from {
-  display: flex;
-
-  &-item {
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
-  .anticon-left-circle {
-    margin-top: 4px;
-    margin-right: 10px;
-  }
-}
-.collapse-script {
-  width: 48%;
-  .divider {
-    height: auto;
-  }
-}
-.script-item {
-  display: flex;
-  width: 100%;
-  margin-bottom: 10px;
-
-  &-column {
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
-  .script {
-    width: 80%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    color: rgb(237, 155, 96);
-  }
-  .index-text {
-    margin-right: 10px !important;
-  }
-}
-.index-text {
-  margin-right: 4px !important;
-}
-.time-text {
-  @include custom-text(12px, #ccc);
-}
-.msg-text {
-  font-weight: bold;
-  @include custom-text(14px, #000);
-}
-.hash-text {
-  @include custom-text(14px, rgb(237, 155, 96));
-}
-.grey-text {
-  @include custom-text(14px, rgb(153, 153, 153));
-}
-.fee-text {
-  @include custom-text(14px, rgb(244, 91, 105));
-}
-.mine-btn {
-  width: 90px;
-  height: 30px;
-  background-color: rgba(237, 155, 96, 0.15);
-  color: rgb(237, 155, 96);
-  border: none;
-  border-radius: 30px;
-  margin-bottom: 6px;
-}
-/* 分页的样式重置 */
-.custom-pagination.ant-pagination.mini {
-  text-align: center;
-  margin: 30px 0;
-}
-
-.copy-hash-btn {
-  border: 0;
-  background: none;
 }
 </style>

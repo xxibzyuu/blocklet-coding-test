@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: yuanzeyu
  * @Date: 2023-10-31 13:44:35
- * @LastEditTime: 2023-10-31 18:14:24
+ * @LastEditTime: 2023-11-01 18:23:55
 -->
 <template>
   <div id="app">
@@ -23,5 +23,5 @@ export default {
 
 <style>
 @import '@/assets/reset.css';
-@import '@/assets/common.css';
+@import '@/assets/common.scss';
 </style>
