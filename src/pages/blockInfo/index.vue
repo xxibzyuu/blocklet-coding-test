@@ -2,7 +2,7 @@
  * @Description: block页
  * @Author: yuanzeyu
  * @Date: 2023-10-30 17:12:26
- * @LastEditTime: 2023-11-01 00:32:49
+ * @LastEditTime: 2023-11-01 09:18:19
 -->
 <template>
   <div>
@@ -16,12 +16,12 @@
           </div>
         </div>
         <div class="gd-flex-c">
-          <div class="mine-item">
+          <div class="mine-name-item">
             <h1>Bitcoin Block</h1>
             <h2>{{ detailInfo.block_index }}</h2>
           </div>
           <div class="mine-item">
-            <span class="time-text">Mined on {{ handleTime(detailInfo.time, 'MMMM/DD/YYYY H:mm:ss') }}</span>
+            <span class="time-text">Mined on {{ detailInfo.minedTime }}</span>
             <span class="dot"></span>
             <a class="hash-text">All Blocks</a>
           </div>
@@ -35,8 +35,8 @@
             >A total of 4,813.14 BTC ($164,787,971) were sent in the block with the average transaction being 1.5895 BTC
             ($54,419.90). F2Pool earned a total reward of 6.25 BTC $213,982. The reward consisted of a base reward of
             6.25 BTC $213,982 with an additional 0.1235 BTC ($4,228.28) reward paid as fees of the 3,028 transactions
-            which were included in the block.</span
-          >
+            which were included in the block.
+          </span>
         </div>
       </div>
 
@@ -173,9 +173,8 @@
 
 <script>
 import { omit, get } from 'lodash';
-import moment from 'moment';
 import VueClipboard from 'vue-clipboard2';
-import { handleHash, copyValue, copySuccess, copyError } from '@/utils/utils';
+import { handleHash, copyValue, copySuccess, copyError, handleTime, handleNum } from '@/utils/utils';
 import headerComponent from '@/components/headerComponent/index.vue';
 import detailComponent from './detail.vue';
 import { BLOCK_DETAIL_COLUMNS } from '@/static/column';
@@ -185,9 +184,9 @@ export default {
   data() {
     return {
       BLOCK_DETAIL_COLUMNS,
-      detailInfo: {},
-      tx: [],
-      transactionList: [], // 交易列表
+      detailInfo: {}, // 概况信息
+      tx: [], // 交易列表
+      transactionList: [], // 分页后的交易列表
       pageTotal: 0, // 列表总数
       pageSize: 15, //每页显示的条目数
       currentPage: 1, // 当前页数
@@ -212,6 +211,8 @@ export default {
     get,
     handleHash,
     copyValue,
+    handleTime,
+    handleNum,
     copyText(value) {
       VueClipboard.copy(value);
       console.log(VueClipboard.success());
@@ -240,6 +241,8 @@ export default {
         this.$NProgress.done();
         this.$nextTick(() => {
           this.isUpdate = true;
+          this.detailInfo.minedTime = handleTime(this.detailInfo.time, 'MMMM/DD/YYYY H:mm:ss');
+          this.detailInfo.block_index = handleNum(this.detailInfo.block_index);
         });
       });
     },
@@ -266,11 +269,6 @@ export default {
         return '--';
       }
     },
-    handleTime(time, format = 'MM/DD/yyyy H:mm:ss') {
-      const date = moment.unix(time);
-      const formattedDate = date.format(format);
-      return formattedDate;
-    },
   },
 };
 </script>
@@ -281,6 +279,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 16px;
 }
 .image-item {
   width: 100px;
@@ -295,6 +294,14 @@ export default {
   display: flex;
   align-items: center;
   margin-bottom: 6px;
+}
+.mine-name-item {
+  display: flex;
+  align-items: baseline;
+
+  h1 {
+    margin-right: 10px !important;
+  }
 }
 .block-item {
   padding: 20px;
@@ -411,6 +418,6 @@ export default {
 /* 分页的样式重置 */
 .custom-pagination.ant-pagination.mini {
   text-align: center;
-  margin-top: 30px 0;
+  margin: 30px 0;
 }
 </style>
