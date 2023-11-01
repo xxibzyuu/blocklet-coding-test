@@ -1,147 +1,94 @@
-# Getting Started with Create Blocklet
+<!--
+ * @Description: 
+ * @Author: yuanzeyu
+ * @Date: 2023-11-01 15:28:13
+ * @LastEditTime: 2023-11-01 19:36:40
+-->
 
-This project was bootstrapped with [Create Blocklet](https://github.com/blocklet/create-blocklet).
+## 快速预览
 
-This blocklet is a static project, which means this is a frontend application. It's contained `client` code.
+<img src="https://github.com/FireTable/arcblock-code-testing/blob/main/screenshots/result-pc.png"  alt=""/>
+<p align="center">block1</p>
 
-## File Structure
+<img src="https://github.com/FireTable/arcblock-code-testing/blob/main/screenshots/result-pc.png"  alt=""/>
+<p align="center">block2</p>
 
-- public/ - static files
-  - favicon.ico - favicon
-  - favicon.svg - favicon
-  - index.html - main html file, template for vue
-- screenshots/ - Screenshots
-- src/ - Client side code (A standard vue app structure)
-- .env - Environment variables
-- .env.local - Local environment variables
-- .eslintrc.js - ESLint configuration
-- .gitignore - Git ignore file
-- .prettierrc - Prettier configuration
-- blocklet.md - Blocklet README
-- blocklet.yml - Blocklet configuration
-- LICENSE - License file
-- logo.png - Blocklet logo file
-- Makefile - Makefile
-- package.json - Npm package file
-- README.md - A guide for this blocklet
-- version - Version file
+## 项目简介
 
-## Development
+* 使用 vue2 static 的相关模板
+* 使用 [ant-design-vue] 作为主要组件库
+* 使用 [scss] 使用mixins，可通过参数配置通用css属性
+* 使用 [lodash、moment] 第三方工具库
+* 使用 [jest] 编写单元测试（初次使用，暂只测试了utils里的）
 
-1. Make sure you have [@blocklet/cli](https://www.npmjs.com/package/@blocklet/cli) installed
 
-   Blocklet needs blocklet server as a dependency. So you need to install it first.
-   `npm install -g @blocklet/cli`
-   See details in [https://developer.blocklet.io/docs/en/quick-start/blocklet-server#use-the-binary-distribution](https://developer.blocklet.io/docs/en/quick-start/blocklet-server#use-the-binary-distribution)
+## 主要目录解释
+```bash
+blocklet-coding-test
+├─ babel.config.js            //babel配置
+├─ blocklet.md
+├─ blocklet.yml
+├─ index.html
+├─ jest.config.js             //jest配置
+├─ package-lock.json
+├─ package.json
+├─ scripts
+│  └─ bump-version.mjs
+├─ src                        //代码目录
+│  ├─ App.vue
+│  ├─ assets                  //样式
+│  │  ├─ common.css
+│  │  ├─ logo.png
+│  │  ├─ mixins.scss
+│  │  └─ reset.css
+│  ├─ components              //组件
+│  │  └─ headerComponent
+│  │     └─ index.vue
+│  ├─ main.js
+│  ├─ pages                   //页面
+│  │  └─ blockInfo
+│  │     ├─ detail.vue
+│  │     └─ index.vue
+│  ├─ static
+│  │  └─ column.js
+│  └─ utils                   //工具方法
+│     ├─ request.js           //axios请求初步封装
+│     ├─ utils.js             //通用方法
+│     └─ utils.test.js        //通用方法单元测试
+```
 
-2. Init blocklet server & start blocklet server
+## 如何使用
 
-   Before starting an blocklet server, you need to init blocklet server.
-   `blocklet server init --mode=debug`
-   `blocklet server start`
-   See details in [https://developer.blocklet.io/docs/en/quick-start/blocklet-server](https://developer.blocklet.io/docs/en/quick-start/blocklet-server)
+```bash
+# 首先找一个你喜欢的目录
+git clone https://github.com/FireTable/arcblock-code-testing.git
 
-3. Go to the project directory `cd [name]`
-4. Install dependencies: `npm install` or `yarn`
-5. Start development server: `blocklet dev`
+# 进入目录
+cd ./block-code-testing
 
-## Bundle
+# 安装依赖
+yarn
 
-After developing a blocklet, you may need to bundle it. Use `npm run bundle` command.
+# 本地启动: 
+# 安装依赖
+npm install
+# blocklet启动
+blocklet dev
 
-## Deploy
+# 运行测试
+npm test
 
-- If you want to deploy this blocklet to local blocklet server, you can use `blocklet deploy .blocklet/bundle` command(Make sure the blocklet is bundled before deployment.)
-  > Or you can simply use `npm run deploy` command.
-- If you want to deploy this blocklet to remote blocklet server, you can use the command below.
+# 编译成生产环境的代码
+npm run build
 
-  ```shell
-  blocklet deploy .blocklet/bundle --endpoint {your blocklet server url} --access-key {blocklet server access key} --access-secret {blocklet server access secret}
-  ```
+# 打包成一个 blocklet
+blocklet bundle
 
-  > Make sure the blocklet is bundled before deployment.
+# 发布到本地 abtnode
+blocklet deploy
 
-## Upload to blocklet store
+```
 
-- If you want to upload the blocklet to any store for other users to download and use, you can following the following instructions.
-
-  Bump version at first.
-
-  ```shell
-  make bump-version
-  ```
-
-  Then config blocklet store url.
-  You can use those store url in below.
-
-  1. [https://store.blocklet.dev/](https://store.blocklet.dev/)
-  2. [https://dev.store.blocklet.dev/](https://dev.store.blocklet.dev/)
-  3. A blocklet store started by yourself.
-     > Make sure you have installed a `blocklet store` on your own blocklet server. Check it on here: [https://store.blocklet.dev/blocklet/z8ia29UsENBg6tLZUKi2HABj38Cw1LmHZocbQ](https://store.blocklet.dev/blocklet/z8ia29UsENBg6tLZUKi2HABj38Cw1LmHZocbQ)
-
-  ```shell
-  blocklet config set store {store url}
-  ```
-
-  Get a `accessToken` from blocklet store.
-
-  > Why we need a `accessToken`?
-  > A `accessToken` is genrate by blocklet store, which help us upload our blocklet to any store.
-
-  Set `accessToken` to blocklet config
-
-  ```shell
-  blocklet config set accessToken {accessToken}
-  ```
-
-  Upload a new version to a store.
-
-  > Make sure the blocklet is bundled before upload.
-
-  ```shell
-  blocklet upload
-  ```
-
-  Or you can simply use `npm run upload` command.
-
-- You also can upload a new version to blocklet store by Github CI.
-  Bump version at first.
-
-  ```shell
-  make bump-version
-  ```
-
-  Push your code to Github main/master branch, or make a pull request to the main/master branch.
-  The CI workflow will automatically upload a new version to a store.
-
-## Q & A
-
-1. Q: How to change a blocklet's name?
-
-   A: Change the `name` field in the `package.json` file, change the `name` field in the `blocklet.yml` file.
-
-   You can also change the `title` field and `description` field in the `blocklet.yml` file.
-
-   Run `blocklet meta` command, you will get a `did` config, copy the `did` value.
-
-   Replace this command `"bundle": "PUBLIC_PATH=/.blocklet/proxy/<%= did %> npm run build",` in `package.json`
-
-   Replace `did` field in the `blocklet.yml`
-
-2. Q: How to change a blocklet's logo?
-
-   Change the `logo.png` file root folder.
-
-   Or you can change the `logo` field in the `blocklet.yml` file.
-
-   > Make sure you have added the logo path to the `blocklet.yml` file `files` field.
-
-## Learn More
-
-- Full specification of `blocklet.yml`: [https://github.com/blocklet/blocklet-specification/blob/main/docs/meta.md](https://github.com/blocklet/blocklet-specification/blob/main/docs/meta.md)
-- Full document of Blocklet Server & blocklet development: [https://developer.blocklet.io/docs/en](https://developer.blocklet.io/docs/en)
-
-## License
-
-The code is licensed under the Apache 2.0 license found in the
-[LICENSE](LICENSE) file.
+## 部分模块的操作说明
+* 右上方的向右图标，可点金查看下一个block
+* 带有复制图标的都可进行复制

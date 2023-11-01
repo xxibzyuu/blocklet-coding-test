@@ -27,6 +27,8 @@ svg {
   box-shadow: none !important;
 }
 .ant-input-search .ant-input {
+  border-top-left-radius: 32px !important;
+  border-bottom-left-radius: 32px !important;
   height: 40px !important; /* 修改输入框的高度为40px */
 }
 .ant-collapse-content > .ant-collapse-content-box {

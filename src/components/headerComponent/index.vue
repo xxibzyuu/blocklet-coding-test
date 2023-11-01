@@ -2,7 +2,7 @@
  * @Description: 顶部搜索框
  * @Author: yuanzeyu
  * @Date: 2023-10-30 17:14:56
- * @LastEditTime: 2023-11-01 18:26:02
+ * @LastEditTime: 2023-11-01 19:35:21
 -->
 <template>
   <div class="header">
@@ -90,8 +90,8 @@ export default {
     border-radius: 30px;
 
     .ant-input {
-      border-top-left-radius: 32px;
-      border-bottom-left-radius: 32px;
+      border-top-left-radius: 32px !important;
+      border-bottom-left-radius: 32px !important;
     }
     .ant-btn {
       border-top-right-radius: 32px;
