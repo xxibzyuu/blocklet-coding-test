@@ -62,7 +62,7 @@ blocklet-coding-test
 
 ```bash
 # 首先找一个你喜欢的目录
-git clone https://github.com/FireTable/arcblock-code-testing.git
+git clone https://github.com/xxibzyuu/blocklet-coding-test.git
 
 # 进入目录
 cd ./block-code-testing
