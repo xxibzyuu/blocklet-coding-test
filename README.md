@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: yuanzeyu
  * @Date: 2023-11-01 15:28:13
- * @LastEditTime: 2023-11-01 20:17:17
+ * @LastEditTime: 2023-11-01 20:19:43
 -->
 
 ## 快速预览
@@ -10,7 +10,7 @@
 <img src="https://github.com/xxibzyuu/blocklet-coding-test/blob/develop/screenshots/index1.png"  alt=""/>
 <p align="center">block1</p>
 
-<img src="https://github.com/xxibzyuu/blocklet-coding-test/blob/develop/screenshots/index1.png"  alt=""/>
+<img src="https://github.com/xxibzyuu/blocklet-coding-test/blob/develop/screenshots/index2.png"  alt=""/>
 <p align="center">block2</p>
 
 ## 项目简介
