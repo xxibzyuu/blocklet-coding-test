@@ -2,10 +2,10 @@
  * @Description: 交易列表
  * @Author: yuanzeyu
  * @Date: 2023-11-01 17:21:14
- * @LastEditTime: 2023-11-01 18:44:57
+ * @LastEditTime: 2023-11-01 20:11:56
 -->
 <template>
-  <div>
+  <div class="transac-list">
     <a-collapse expandIconPosition="right" :bordered="false">
       <a-collapse-panel :key="index" v-for="(item, index) in paginatedData">
         <div slot="header" class="block-item-header">

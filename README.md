@@ -2,15 +2,15 @@
  * @Description: 
  * @Author: yuanzeyu
  * @Date: 2023-11-01 15:28:13
- * @LastEditTime: 2023-11-01 19:36:40
+ * @LastEditTime: 2023-11-01 20:17:17
 -->
 
 ## 快速预览
 
-<img src="https://github.com/FireTable/arcblock-code-testing/blob/main/screenshots/result-pc.png"  alt=""/>
+<img src="https://github.com/xxibzyuu/blocklet-coding-test/blob/develop/screenshots/index1.png"  alt=""/>
 <p align="center">block1</p>
 
-<img src="https://github.com/FireTable/arcblock-code-testing/blob/main/screenshots/result-pc.png"  alt=""/>
+<img src="https://github.com/xxibzyuu/blocklet-coding-test/blob/develop/screenshots/index1.png"  alt=""/>
 <p align="center">block2</p>
 
 ## 项目简介
@@ -20,6 +20,7 @@
 * 使用 [scss] 使用mixins，可通过参数配置通用css属性
 * 使用 [lodash、moment] 第三方工具库
 * 使用 [jest] 编写单元测试（初次使用，暂只测试了utils里的）
+* 使用 [Cypress] e2e测试（初次使用，预留时间较短，待完善）
 
 
 ## 主要目录解释
