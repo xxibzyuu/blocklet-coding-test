@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: yuanzeyu
  * @Date: 2023-11-01 15:28:13
- * @LastEditTime: 2023-11-01 20:19:43
+ * @LastEditTime: 2023-11-01 20:21:37
 -->
 
 ## 快速预览
@@ -68,12 +68,9 @@ git clone https://github.com/xxibzyuu/blocklet-coding-test.git
 cd ./block-code-testing
 
 # 安装依赖
-yarn
-
-# 本地启动: 
-# 安装依赖
 npm install
-# blocklet启动
+
+# 本地启动
 blocklet dev
 
 # 运行测试
