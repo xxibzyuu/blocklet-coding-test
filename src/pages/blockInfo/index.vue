@@ -2,7 +2,7 @@
  * @Description: block页
  * @Author: yuanzeyu
  * @Date: 2023-10-30 17:12:26
- * @LastEditTime: 2023-11-01 18:46:51
+ * @LastEditTime: 2023-11-01 20:35:46
 -->
 <template>
   <div class="container">
@@ -112,7 +112,6 @@ export default {
     },
     getDetail(rawBlock = '00000000000000000007878ec04bb2b2e12317804810f4c26033585b3f81ffaa') {
       this.spinning = true;
-      // this.$NProgress.start();
       this.isUpdate = false;
       this.$axios
         .get(`/rawblock/${rawBlock}`)
@@ -121,7 +120,6 @@ export default {
           this.detailInfo = omit(res.data, 'tx');
           this.tx = res.data.tx;
           this.pageTotal = this.tx.length;
-          // this.$NProgress.done();
           this.spinning = false;
           this.$nextTick(() => {
             this.isUpdate = true;
