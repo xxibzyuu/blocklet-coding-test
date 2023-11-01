@@ -2,7 +2,7 @@
  * @Description: 通用方法
  * @Author: yuanzeyu
  * @Date: 2023-10-30 23:41:10
- * @LastEditTime: 2023-11-01 12:52:58
+ * @LastEditTime: 2023-11-01 15:00:11
  */
 import Clipboard from 'clipboard';
 import moment from 'moment';
@@ -47,7 +47,7 @@ export function copyValue(element, key, data) {
     console.log('error', e);
   });
 }
-
+// 复制到剪贴板
 export async function copyTextToClipboard(text) {
   try {
     await navigator.clipboard.writeText(text);
