@@ -1,28 +1,27 @@
+<!--
+ * @Description: 
+ * @Author: yuanzeyu
+ * @Date: 2023-10-31 13:44:35
+ * @LastEditTime: 2023-11-01 18:23:55
+-->
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <block-info></block-info>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue';
+import blockInfo from '@/pages/blockInfo/index.vue';
 
 export default {
   name: 'App',
   components: {
-    HelloWorld,
+    blockInfo,
   },
 };
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+@import '@/assets/reset.css';
+@import '@/assets/common.scss';
 </style>

@@ -1,0 +1,57 @@
+@import './mixins.scss';
+.gd-flex-center {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.gd-flex-c {
+  display: flex;
+  flex-direction: column;
+}
+
+.dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #ccc;
+  margin: 0 5px;
+}
+
+.slide-fade-enter-active {
+  transition: all 0.5s ease;
+}
+.anticon-copy {
+  font-size: 12px;
+  color: rgb(153, 153, 153) !important;
+  margin-left: 4px;
+}
+
+.index-text {
+  margin-right: 4px !important;
+}
+.time-text {
+  @include custom-text(12px, #ccc);
+}
+.msg-text {
+  font-weight: bold;
+  @include custom-text(14px, #000);
+}
+.hash-text {
+  @include custom-text(14px, rgb(237, 155, 96));
+}
+.grey-text {
+  @include custom-text(14px, rgb(153, 153, 153));
+}
+.fee-text {
+  @include custom-text(14px, rgb(244, 91, 105));
+}
+.mine-btn {
+  width: 90px;
+  height: 30px;
+  background-color: rgba(237, 155, 96, 0.15);
+  color: rgb(237, 155, 96);
+  border: none;
+  border-radius: 30px;
+  margin-bottom: 6px;
+}
