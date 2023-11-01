@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: yuanzeyu
  * @Date: 2023-11-01 15:28:13
- * @LastEditTime: 2023-11-01 20:21:37
+ * @LastEditTime: 2023-11-01 20:54:31
 -->
 
 ## 快速预览
@@ -48,8 +48,10 @@ blocklet-coding-test
 │  ├─ main.js
 │  ├─ pages                   //页面
 │  │  └─ blockInfo
-│  │     ├─ detail.vue
+│  │     ├─ detail.vue        //详情模块
+│  │     └─ transaction.vue   //交易列表模块
 │  │     └─ index.vue
+│  │     └─ index.spec.js
 │  ├─ static
 │  │  └─ column.js
 │  └─ utils                   //工具方法
