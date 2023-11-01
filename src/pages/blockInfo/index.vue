@@ -2,7 +2,7 @@
  * @Description: block页
  * @Author: yuanzeyu
  * @Date: 2023-10-30 17:12:26
- * @LastEditTime: 2023-11-01 09:18:19
+ * @LastEditTime: 2023-11-01 12:53:07
 -->
 <template>
   <div>
@@ -56,9 +56,9 @@
                     <div class="gd-flex-center">
                       <h4 class="index-text">{{ index }}</h4>
                       <span class="grey-text">ID：</span><span class="hash-text">{{ handleHash(item.hash) }}</span>
-                      <span :class="`copy-btn${index}`" @click.stop="copyValue(`.copy-btn${index}`, 'hash', item)">
+                      <button :class="`copy-hash-btn`" @click.stop="copyTextToClipboard(item.hash)">
                         <a-icon type="copy" />
-                      </span>
+                      </button>
                     </div>
                     <p class="grey-text">{{ handleTime(item.time) }}</p>
                   </a-col>
@@ -71,7 +71,7 @@
                       <span
                         class="copy-input-btn"
                         v-if="item.inputs.length == 1"
-                        @click.stop="copyValue(`.copy-input-btn`, 'script', item.inputs[0])">
+                        @click.stop="copyTextToClipboard(get(item.inputs, '0.script'))">
                         <a-icon type="copy" />
                       </span>
                     </p>
@@ -81,7 +81,7 @@
                       <span
                         class="copy-out-btn"
                         v-if="item.out.length == 1"
-                        @click.stop="copyValue(`.copy-out-btn`, 'script', item.out[0])">
+                        @click.stop="copyTextToClipboard(get(item.out, '0.script'))">
                         <a-icon type="copy" />
                       </span>
                     </p>
@@ -113,13 +113,9 @@
                           <div class="script-item-column">
                             <p class="gd-flex-center">
                               <span class="script">{{ ytem.script }}</span>
-                              <span
-                                class="copy-btn"
-                                v-clipboard:copy.stop="ytem.script"
-                                v-clipboard:success="copySuccess"
-                                v-clipboard:error="copyError"
-                                ><a-icon type="copy"
-                              /></span>
+                              <span class="copy-btn" @click.stop="copyTextToClipboard(ytem.script)">
+                                <a-icon type="copy" />
+                              </span>
                             </p>
                             <p>
                               <span>0.03900400 BTC</span>
@@ -138,13 +134,9 @@
                       <div class="script-item-column">
                         <p class="gd-flex-center">
                           <span class="script">{{ ztem.script }}</span>
-                          <span
-                            class="copy-btn"
-                            v-clipboard:copy.stop="ztem.script"
-                            v-clipboard:success="copySuccess"
-                            v-clipboard:error="copyError"
-                            ><a-icon type="copy"
-                          /></span>
+                          <span class="copy-btn" @click.stop="copyTextToClipboard(ztem.script)">
+                            <a-icon type="copy" />
+                          </span>
                         </p>
                         <p>
                           <span>0.03900400 BTC</span>
@@ -173,8 +165,7 @@
 
 <script>
 import { omit, get } from 'lodash';
-import VueClipboard from 'vue-clipboard2';
-import { handleHash, copyValue, copySuccess, copyError, handleTime, handleNum } from '@/utils/utils';
+import { handleHash, copyValue, handleTime, handleNum, copyTextToClipboard } from '@/utils/utils';
 import headerComponent from '@/components/headerComponent/index.vue';
 import detailComponent from './detail.vue';
 import { BLOCK_DETAIL_COLUMNS } from '@/static/column';
@@ -213,16 +204,7 @@ export default {
     copyValue,
     handleTime,
     handleNum,
-    copyText(value) {
-      VueClipboard.copy(value);
-      console.log(VueClipboard.success());
-    },
-    copySuccess(e) {
-      copySuccess(e);
-    },
-    copyError(e) {
-      copyError(e);
-    },
+    copyTextToClipboard,
     getSearch(value) {
       this.getDetail(value);
     },
@@ -419,5 +401,10 @@ export default {
 .custom-pagination.ant-pagination.mini {
   text-align: center;
   margin: 30px 0;
+}
+
+.copy-hash-btn {
+  border: 0;
+  background: none;
 }
 </style>

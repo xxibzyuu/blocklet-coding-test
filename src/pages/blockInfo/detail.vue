@@ -2,7 +2,7 @@
  * @Description: block概要
  * @Author: yuanzeyu
  * @Date: 2023-10-31 08:44:17
- * @LastEditTime: 2023-10-31 21:19:07
+ * @LastEditTime: 2023-11-01 12:56:21
 -->
 <template>
   <div class="detail-list">
@@ -16,16 +16,17 @@
           {{ renderValue(item) }}
         </a-tooltip>
         <span v-else>{{ renderValue(item) }}</span>
-        <span v-if="item.copyable" class="copy-btn" ref="copys" @click="$nextTick(() => {copyValue('.copy-btn', item.key, detailInfo)})"><a-icon type="copy" :style="{'fontSize': '12px'}"/></span>
+        <span v-if="item.copyable" class="copy-btn" ref="copys" @click.stop="copyTextToClipboard(detailInfo[item.key])"
+          ><a-icon type="copy" :style="{ fontSize: '12px' }"
+        /></span>
       </span>
-      
     </div>
   </div>
 </template>
 
 <script>
 import { BLOCK_DETAIL_COLUMNS } from '@/static/column';
-import { copyValue, updateDuration } from '@/utils/utils'
+import { updateDuration, copyTextToClipboard } from '@/utils/utils';
 import moment from 'moment';
 
 export default {
@@ -35,7 +36,7 @@ export default {
     return {
       BLOCK_DETAIL_COLUMNS,
       currentDetail: {},
-      duration: ''
+      duration: '',
     };
   },
   mounted() {
@@ -45,27 +46,27 @@ export default {
     }, 1000);
   },
   beforeDestroy() {
-    clearInterval()
+    clearInterval();
   },
   methods: {
-    copyValue,
+    copyTextToClipboard,
     renderValue(item) {
-      if(this.isUpdate) {
+      if (this.isUpdate) {
         const key = item.key;
         const customRender = item.render;
-  
-        if (this.detailInfo.hasOwnProperty(key)) {
+
+        if (Object.property.hasOwnProperty.call(this.detailInfo, key)) {
           let value = this.detailInfo[key];
-  
+
           if (customRender && typeof customRender === 'function') {
             return customRender(key, value);
           }
           // 实时计时
-          if(key == 'time') {
+          if (key == 'time') {
             this.duration = updateDuration(this.detailInfo.time);
             return this.duration;
           }
-  
+
           return value;
         }
         return '--';
@@ -77,8 +78,8 @@ export default {
       let duration = moment.duration(this.duration);
       duration.add(1, 'second');
       const currentDuration = moment.utc(duration.asMilliseconds()).format('HH:mm:ss');
-      this.duration = currentDuration
-      this.currentDetail['time'] = currentDuration
+      this.duration = currentDuration;
+      this.currentDetail['time'] = currentDuration;
     },
   },
 };
